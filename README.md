@@ -18,6 +18,14 @@ It helps streamline operations by managing customer orders, tracking top-selling
 - 🎨 Modern & user-friendly UI with animations.
 
 ---
+## ✨ UI
+<img src="https://github.com/user-attachments/assets/5b8b16ed-3df4-4598-84c9-150bd603df6e" width="300" />
+<img src="https://github.com/user-attachments/assets/348b959f-efba-44a7-a788-d3ebd36d22a0" width="300" />
+<img src="https://github.com/user-attachments/assets/15957094-c599-4a58-ac08-7545da06faaa" width="300" />
+
+
+
+---
 
 ## 🏛️ Architecture
 
