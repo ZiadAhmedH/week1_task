@@ -12,9 +12,9 @@ class OrderCubit extends Cubit<OrderState> {
     emit(OrderLoading());
     try {
       final orders = await orderService.getAllOrders();
-      emit(OrderLoaded(orders));
+      if (!isClosed) emit(OrderLoaded(orders)); // Guard
     } catch (e) {
-      emit(OrderError("Failed to load orders: $e"));
+      if (!isClosed) emit(OrderError("Failed to load orders: $e"));
     }
   }
 
@@ -22,24 +22,22 @@ class OrderCubit extends Cubit<OrderState> {
     emit(OrderLoading());
     try {
       await Future.delayed(const Duration(seconds: 1));
-
       await orderService.addOrder(order);
       final orders = await orderService.getAllOrders();
-      emit(OrderLoaded(orders));
+      if (!isClosed) emit(OrderLoaded(orders));
     } catch (e) {
-      emit(OrderError("Failed to add order: $e"));
+      if (!isClosed) emit(OrderError("Failed to add order: $e"));
     }
   }
 
   Future<void> markOrderCompleted(Order order) async {
-    emit(OrderLoading());
     try {
       order.isCompleted = true;
       await orderService.updateOrder(order);
       final orders = await orderService.getAllOrders();
       emit(OrderLoaded(orders));
     } catch (e) {
-      emit(OrderError("Failed to update order: $e"));
+      if (!isClosed) emit(OrderError("Failed to update order: $e"));
     }
   }
 }

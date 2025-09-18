@@ -7,12 +7,15 @@ class Order {
   final String? specialInstructions;
   bool isCompleted;
 
+
+
   Order({
     this.id,
     required this.customerName,
     required this.drink,
     this.specialInstructions,
     this.isCompleted = false,
+
   });
 
   Map<String, dynamic> toMap() {
@@ -22,6 +25,7 @@ class Order {
       'drink': drink.name,
       'specialInstructions': specialInstructions,
       'isCompleted': isCompleted ? 1 : 0,
+
     };
   }
 }

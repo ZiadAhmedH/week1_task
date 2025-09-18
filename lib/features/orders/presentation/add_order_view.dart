@@ -36,87 +36,83 @@ class _AddOrderViewState extends State<AddOrderView> {
     return BlocConsumer<OrderCubit, OrderState>(
       listener: (context, state) {
         if (state is OrderLoaded) {
-          Navigator.pop(context);
         } else if (state is OrderError) {
-          ScaffoldMessenger.of(
-            context,
-          ).showSnackBar(SnackBar(content: Text(state.message)));
+          if (mounted) {
+            ScaffoldMessenger.of(
+              context,
+            ).showSnackBar(SnackBar(content: Text(state.message)));
+          }
         }
       },
+
       builder: (context, state) {
         final isLoading = state is OrderLoading;
 
-        return Stack(
-          children: [
-            Scaffold(
-              backgroundColor: const Color(0xFFf3ede3),
-              appBar: AppBar(
-                backgroundColor: const Color(0xFF4E342E),
-                title: const Text(
-                  "➕ Add Order",
-                  style: TextStyle(color: Colors.white),
-                ),
-              ),
-              body: SingleChildScrollView(
-                padding: const EdgeInsets.all(20),
-                child: Column(
-                  children: [
-                    _buildTextField(
-                      controller: _nameController,
-                      label: "Customer Name",
-                      icon: Icons.person,
-                    ),
-                    const SizedBox(height: 16),
-                    _buildDropdown(),
-                    const SizedBox(height: 16),
-                    _buildTextField(
-                      controller: _instructionsController,
-                      label: "Special Instructions",
-                      icon: Icons.note,
-                    ),
-                    const SizedBox(height: 24),
-                    ElevatedButton.icon(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFF6D4C41),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 32,
-                          vertical: 14,
-                        ),
-                      ),
-                      onPressed: isLoading
-                          ? null
-                          : () {
-                              final order = Order(
-                                customerName: _nameController.text,
-                                drink: _selectedDrink,
-                                specialInstructions:
-                                    _instructionsController.text,
-                              );
-                              context.read<OrderCubit>().addOrder(order);
-                            },
-                      icon: const Icon(Icons.coffee, color: Colors.white),
-                      label: const Text(
-                        "Save Order",
-                        style: TextStyle(color: Colors.white, fontSize: 16),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+        return Scaffold(
+          backgroundColor: const Color(0xFFf3ede3),
+          appBar: AppBar(
+            backgroundColor: const Color(0xFF4E342E),
+            title: const Text(
+              "➕ Add Order",
+              style: TextStyle(color: Colors.white),
             ),
-
-            /// Overlay loading indicator
-            if (isLoading)
-              Container(
-                color: Colors.black45,
-                child: const Center(
-                  child: CircularProgressIndicator(color: Colors.white),
+          ),
+          body: SingleChildScrollView(
+            padding: const EdgeInsets.all(20),
+            child: Column(
+              children: [
+                _buildTextField(
+                  controller: _nameController,
+                  label: "Customer Name",
+                  icon: Icons.person,
                 ),
-              ),
-          ],
+                const SizedBox(height: 16),
+                _buildDropdown(),
+                const SizedBox(height: 16),
+                _buildTextField(
+                  controller: _instructionsController,
+                  label: "Special Instructions",
+                  icon: Icons.note,
+                ),
+                const SizedBox(height: 24),
+                ElevatedButton.icon(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xFF6D4C41),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 32,
+                      vertical: 14,
+                    ),
+                  ),
+                  onPressed: isLoading
+                      ? null
+                      : () {
+                          final order = Order(
+                            customerName: _nameController.text,
+                            drink: _selectedDrink,
+                            specialInstructions: _instructionsController.text,
+                          );
+                          context.read<OrderCubit>().addOrder(order);
+                          // Clear inputs after adding
+                          _nameController.clear();
+                          _instructionsController.clear();
+                          setState(() {
+                            _selectedDrink = _drinks.first;
+                          });
+                        },
+                  icon: const Icon(Icons.coffee, color: Colors.white),
+                  label: isLoading
+                      ? CircularProgressIndicator()
+                      : Text(
+                          "Save Order",
+                          style: TextStyle(color: Colors.white, fontSize: 16),
+                        ),
+                ),
+              ],
+            ),
+          ),
         );
       },
     );

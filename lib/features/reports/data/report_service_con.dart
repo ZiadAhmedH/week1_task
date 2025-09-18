@@ -31,6 +31,8 @@ class SQLiteReportService implements ReportService {
       LIMIT 1
     ''');
 
+    // 4. Total revenue (assuming each drink has a fixed price)
+
     String topDrink = "No Orders";
     int topDrinkCount = 0;
     if (topDrinkRes.isNotEmpty) {
@@ -43,6 +45,7 @@ class SQLiteReportService implements ReportService {
       topDrinkCount: topDrinkCount,
       totalOrders: totalOrders,
       totalCustomers: totalCustomers,
+      totalRevenue: 200.2,
     );
   }
 }

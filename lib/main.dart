@@ -5,6 +5,7 @@ import 'features/orders/logic/order_cubit.dart';
 import 'features/orders/presentation/order_list_view.dart';
 import 'features/reports/logic/report_cubit.dart';
 import 'features/reports/presentaion/reports_view.dart';
+import 'home_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -19,21 +20,12 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MultiBlocProvider(
-      providers: [
-        BlocProvider(create: (_) => sl<OrderCubit>()..loadOrders()),
-        BlocProvider(create: (_) => sl<ReportCubit>()),
-      ],
-      child: MaterialApp(
-        title: 'Ahwa Store Manager',
-        theme: ThemeData(primarySwatch: Colors.brown, useMaterial3: true),
-        home: const OrderListView(),
-        routes: {
-          '/reports': (_) => BlocProvider(
-            create: (_) => sl<ReportCubit>()..loadReport(),
-            child: const ReportsView(),
-          ),
-        },
+    return MaterialApp(
+      title: 'Ahwa Store Manager',
+      theme: ThemeData(primarySwatch: Colors.brown, useMaterial3: true),
+      home: BlocProvider(
+        create: (context) => sl<OrderCubit>()..loadOrders(),
+        child: HomeScreen(),
       ),
     );
   }
